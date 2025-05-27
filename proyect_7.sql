@@ -2,18 +2,18 @@ USE proyect_7;
 
 SELECT * FROM athlete_events;
 
--- 1. ¿Cuántos juegos Olímpicos se han celebrado?
+-- 1. How many Olympic Games have been held?
 SELECT COUNT(DISTINCT Year) AS Total_games FROM athlete_events;
 
--- 2. Enumera todos los juegos Olímpicos celebrados hasta ahora
+-- 2. Lists all the Olympic games held so far
 SELECT DISTINCT Games FROM athlete_events;
 
--- 3. Menciona el número total de naciones que participaron en cada juego Olímpico
+-- 3. Mention the total number of nations that participated in each Olympic game
 SELECT Games, COUNT(DISTINCT NOC) AS Total_Naciones FROM athlete_events
 GROUP BY Games
 ORDER BY Games DESC;
 
--- 4. ¿En qué año se vio el mayor y menor número de países participando en los juegos Olímpicos?
+-- 4. In which year did the largest and smallest number of countries participate in the Olympic Games?
 (SELECT Year, COUNT(DISTINCT NOC) AS NumeroPaisesMax FROM athlete_events
 GROUP BY Year
 ORDER BY NumeroPaisesMax DESC LIMIT 1)
@@ -22,14 +22,14 @@ UNION
 GROUP BY Year
 ORDER BY NumeroPaisesMin ASC LIMIT 1);
 
--- 5. ¿Qué nación ha participado en todos los juegos Olímpicos? --
+-- 5. Which nation has participated in all the Olympics? --
 SELECT NOC, COUNT(DISTINCT Year) AS Num_Participaciones
 FROM athlete_events
 GROUP BY NOC
 HAVING Num_Participaciones = (
   SELECT COUNT(DISTINCT Year) FROM athlete_events);
 
--- 6. Identifica el deporte que se jugó en todas las olimpiadas de verano
+-- 6. Identifies the sport that was played in all summer Olympics
 SELECT Sport FROM (
     SELECT Sport, COUNT(DISTINCT Games) AS Num_Juegos
     FROM athlete_events
@@ -42,7 +42,7 @@ WHERE Num_Juegos = (
     WHERE Season = 'Summer'
 );
 
--- 7. Identifica el deporte que se jugó en todos los juegos Olímpicos de verano
+-- 7. Identifies the sport that was played in all the Summer Olympics
 SELECT DISTINCT Sport
 FROM athlete_events
 WHERE Season = 'Summer'
@@ -50,13 +50,13 @@ GROUP BY Sport
 HAVING COUNT(DISTINCT Year) = (SELECT COUNT(DISTINCT Year) FROM athlete_events
                                 WHERE Season = 'Summer');
 
--- 8. Obten el número total de deportes jugados en cada Juego Olímpico
+-- 8. Get the total number of sports played in each Olympic Game
 SELECT * FROM athlete_events;
 
 SELECT Games,COUNT(DISTINCT Sport) AS Tota_Juegos FROM athlete_events
 GROUP BY Games;
 
--- 9. Encuentra la proporción de atletas masculinos y femeninos que participaron
+-- 9. Find the ratio of male and female athletes who participated
 SELECT * FROM athlete_events;
 
 SELECT Year,
@@ -72,13 +72,13 @@ SELECT Year,
 ORDER BY Year;
 
 
--- 10. Busque los 5 mejores atletas que han ganado la mayor cantidad de medallas de oro--
+-- 10. Look for the top 5 athletes who have won the most gold medals--
 SELECT Name, COUNT(Medal) AS Oro_Ganadas FROM athlete_events
 WHERE Medal = 'Gold'
 GROUP BY Name
 ORDER BY Oro_Ganadas DESC LIMIT 5;
 
--- 11. Obten los 5 mejores atletas que han ganado la mayoría de las medallas (oro/plata/bronce)
+-- 11. Get the top 5 athletes who have won most medals (gold/silver/bronze)
 
 SELECT
      Name,
@@ -92,8 +92,9 @@ GROUP BY name
 ORDER BY total_medals DESC
 LIMIT 5;
 
--- 12. Obten los 5 países más exitosos en los Juegos Olímpicos -- 
--- El éxito se define por el número de medallas ganadas --
+
+-- 12. Get the 5 most successful countries in the Olympics -- 
+-- Success is defined by the number of medals won --
 
 SELECT * FROM athlete_events;
 
@@ -109,7 +110,7 @@ GROUP BY Team
 ORDER BY total_medals DESC 
 LIMIT 5;
 
--- 13. Enumera el número de medallas de oro, plata y bronce por cada país --
+-- 13. List the number of gold, silver and bronze medals for each country --
 
 SELECT
       Team AS Country,
@@ -122,7 +123,7 @@ WHERE Medal IN ('Gold','Silver','Bronze')
 GROUP BY Team 
 ORDER BY Country;
 
--- 14. Enumera el número total de medallas de oro, plata y bronce ganadas por cada país en relación con cada Juego Olímpico
+-- 14. List the total number of gold, silver and bronze medals won by each country in relation to each Olympic Game
 SELECT * FROM athlete_events;
 
 SELECT 
@@ -136,7 +137,7 @@ WHERE Medal IN ('Gold','Silver','Bronze')
 GROUP BY Team, Year
 ORDER BY Country, Olimpic_year;
 
--- 15. Identifica qué país ganó la mayoría de las medallas de oro, plata y bronce en cada Juego Olímpico
+-- 15. Identify which country won the most gold, silver and bronze medals in each Olympic Game
 SELECT * FROM athlete_events;
 
 SELECT 
@@ -159,7 +160,7 @@ FROM (                 SELECT
                WHERE Medal IN('Gold', 'Silver', 'Bronze')
                GROUP BY Year, Winning_Country, Medal) AS MedalCounts;
 
- -- 16. ¿En qué deportes/eventos India ha ganado la mayor cantidad de medallas?
+ -- 16. In which sports/events has India won the most medals?
  
 SELECT 
        Sport,
@@ -172,8 +173,8 @@ WHERE Team = 'India' AND Medal IN ('Gold','Silver','Bronze')
 GROUP BY Sport, Event
 ORDER BY Gold DESC, Silver DESC, Bronze DESC;
 
--- 17. Desglosa todos los Juegos Olimpicos en los que India ganó medallas en hockey
--- y cuántas medallas ganó en ada uno de ellos
+-- 17. Break down all the Olympic Games in which India won medals in hockey
+-- and how many medals did one of them win in ada
 
 SELECT 
        Year AS Olympic_Year,
